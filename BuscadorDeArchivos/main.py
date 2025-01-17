@@ -6,7 +6,7 @@ e = ""
 
 # Ruta donde creare un bash
 route = os.path.dirname(os.path.abspath(__file__))
-
+final_text_joined=''
 # Funcion que maneja la logica de seleccion y completado de texto
 def interfaz_interactiva(stdscr):
     curses.curs_set(1)  # Mostrar el cursor
@@ -279,6 +279,7 @@ def interfaz_interactiva(stdscr):
         stdscr.clear()
         if final_text != ["find"]:
             fin="Resultado final de la busqueda: "
+            global final_text_joined
             final_text_joined = " ".join(final_text)
             stdscr.addstr(0, 0, fin+ final_text_joined)
             stdscr.refresh()
@@ -290,16 +291,13 @@ def interfaz_interactiva(stdscr):
         stdscr.addstr(0, 0, ERROR)
         stdscr.refresh()
         stdscr.getch()
-    if final_text != ["find"]:
-        with open(route + "/ejecucion.sh", 'w') as e:
-            e.write(final_text_joined)
 
 
 # Inicializar curses y ejecutar el programa
 resultat = curses.wrapper(interfaz_interactiva)
 
 try:
-    if os.path.isfile(route + "/ejecucion.sh"): # Revisa que exista el .bash
-        subprocess.run(['bash', route + '/ejecucion.sh'], text=True)
+    resultado = subprocess.run(final_text_joined, shell=True, capture_output=True, text=True)
 except BaseException:
     print("Algo ha salido mal, si este error perdura, contacta con: urosal@institutmvm.cat")
+print(resultado.stdout)

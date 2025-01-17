@@ -1,7 +1,8 @@
 import math
+import os
 
 class functions:
-
+    route = os.path.dirname(os.path.abspath(__file__))
     def operar(self, operacion) -> float:
         try:
             diccionarioFunciones ={
@@ -93,12 +94,12 @@ class functions:
         return operacion[0]
 
     def ansEscritura(self, respuesta):
-        with open('Calculadora/save.txt', 'w') as ans:
+        with open(self.route + '/save.txt', 'w') as ans:
             ans.write(str(respuesta))
 
     def ansLectura(self):
         try:
-            with open('Calculadora/save.txt', 'r') as ans:
+            with open(self.route + '/save.txt', 'r') as ans:
                 return ans.read()
         except BaseException:
             return "Error: No existe ans si nunca has utilizado la calculadora."
